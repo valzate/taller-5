@@ -134,4 +134,30 @@ class DirectedGraph {
     return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
   }
 }
+*/
+(function demo() {
+  const g = new DirectedGraph();
 
+  // Agregar vértices (opcional: también se crean al agregar aristas)
+  g.addVertex("A");
+  g.addVertex("B");
+  g.addVertex("C");
+  g.addVertex("D");
+
+  // Agregar aristas dirigidas
+  g.addEdge("A", "B");
+  g.addEdge("A", "C");
+  g.addEdge("B", "C");
+  g.addEdge("C", "A");
+  g.addEdge("C", "D");
+  g.addEdge("D", "D"); // bucle permitido
+
+  // Imprimir representaciones
+  g.printAdjacencyList();
+  console.log(); // línea en blanco
+  g.printAdjacencyMatrix();
+
+  // Acceder a estructuras si las necesitas programáticamente:
+  console.log(g.getAdjacencyList());
+  console.log(g.getAdjacencyMatrix());
+})();
