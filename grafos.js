@@ -44,24 +44,3 @@ class Grafo {
   }
 }
 
-/* CREACIÓN DEL GRAFO*/
-const g = new Grafo();
-
-// Agregar aristas dirigidas
-g.agregarArista("A", "B");
-g.agregarArista("A", "C");
-g.agregarArista("B", "C");
-g.agregarArista("C", "D");
-g.agregarArista("D", "A");
-g.agregarArista("D", "E");
-// Mostrar lista de adyacencia
-console.log("Lista de adyacencia:");
-console.log(g.obtenerListaAdyacencia());
-// Mostrar vértices
-console.log("\nVertices:", g.vertices);
-const matriz = g.obtenerMatrizAdyacencia();
-// Mostrar la matriz de adyacencia en formato legible
-console.log("\nMatriz de adyacencia legible:");
-for (let i = 0; i < matriz.length; i++) {
-  console.log(`${g.vertices[i]}: ${matriz[i].join(" ")}`);
-}
