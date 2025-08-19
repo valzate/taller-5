@@ -1,46 +1,75 @@
-// Clase Grafo dirigido
-class Grafo {
+class DirectedGraph {
+  /**
+   * Usamos un Map para:
+   *  - Clave: nombre/ID del vértice (string o número)
+   *  - Valor: Set con los vecinos (evita duplicados)
+   */
   constructor() {
-    this.vertices = [];           // Lista de vértices
-    this.listaAdyacencia = {};    // Representación como lista
+    this.adj = new Map();
   }
 
-  // Agregar vértice
-  agregarVertice(v) {
-    if (!this.vertices.includes(v)) {
-      this.vertices.push(v);
-      this.listaAdyacencia[v] = [];
+  /**
+   * Agrega un vértice si no existe.
+   * @param {string|number} v - Identificador del vértice
+   */
+  addVertex(v) {
+    this.#assertValidLabel(v);
+    if (!this.adj.has(v)) {
+      this.adj.set(v, new Set());
     }
   }
 
-  // Agregar arista dirigida u -> v
-  agregarArista(u, v) {
-    this.agregarVertice(u);
-    this.agregarVertice(v);
-    this.listaAdyacencia[u].push(v);
+  /**
+   * Agrega una arista dirigida u -> v.
+   * Si los vértices no existen, se crean automáticamente.
+   * No se agregan duplicados gracias al Set.
+   * @param {string|number} u - Origen
+   * @param {string|number} v - Destino
+   */
+  addEdge(u, v) {
+    this.#assertValidLabel(u);
+    this.#assertValidLabel(v);
+    this.addVertex(u);
+    this.addVertex(v);
+    this.adj.get(u).add(v);
   }
 
-  // Obtener lista de adyacencia
-  obtenerListaAdyacencia() {
-    return this.listaAdyacencia;
+  /**
+   * Retorna una copia “simple” de la lista de adyacencia,
+   * con arrays en lugar de Sets para fácil lectura/impresión.
+   * @returns {Record<string, Array<string|number>>}
+   */
+  getAdjacencyList() {
+    const list = {};
+    for (const [v, neighbors] of this.adj.entries()) {
+      list[v] = Array.from(neighbors);
+    }
+    return list;
   }
 
-  // Obtener matriz de adyacencia
-  obtenerMatrizAdyacencia() {
-    const n = this.vertices.length;
-    // Crear matriz n x n llena de 0
-    const matriz = Array.from({ length: n }, () => Array(n).fill(0));
+  /**
+   * Retorna la matriz de adyacencia y el orden de vértices usado.
+   * - La matriz es de tamaño n x n, donde n = número de vértices.
+   * - matriz[i][j] = 1 si existe arista vertices[i] -> vertices[j], de lo contrario 0.
+   * @returns {{ vertices: Array<string|number>, matrix: number[][] }}
+   */
+  getAdjacencyMatrix() {
+    const vertices = Array.from(this.adj.keys());
+    // Orden estable y legible: por defecto alfabético si son strings, por valor si son números
+    vertices.sort(this.#defaultSort);
 
-    for (let i = 0; i < n; i++) {
-      const u = this.vertices[i];
-      for (let j = 0; j < this.listaAdyacencia[u].length; j++) {
-        const v = this.listaAdyacencia[u][j];
-        const col = this.vertices.indexOf(v);
-        matriz[i][col] = 1; // 1 si existe arista u -> v
+    const index = new Map(vertices.map((v, i) => [v, i]));
+    const n = vertices.length;
+    const matrix = Array.from({ length: n }, () => Array(n).fill(0));
+
+    for (const [u, neighbors] of this.adj.entries()) {
+      const i = index.get(u);
+      for (const v of neighbors) {
+        const j = index.get(v);
+        matrix[i][j] = 1;
       }
     }
-
-    return matriz;
+    return { vertices, matrix };
   }
-}
+
 
