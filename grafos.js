@@ -134,7 +134,7 @@ class DirectedGraph {
     return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
   }
 }
-*/
+
 (function demo() {
   const g = new DirectedGraph();
 
@@ -143,6 +143,8 @@ class DirectedGraph {
   g.addVertex("B");
   g.addVertex("C");
   g.addVertex("D");
+  g.addVertex("E"); 
+  g.addVertex("F");
 
   // Agregar aristas dirigidas
   g.addEdge("A", "B");
@@ -150,7 +152,9 @@ class DirectedGraph {
   g.addEdge("B", "C");
   g.addEdge("C", "A");
   g.addEdge("C", "D");
-  g.addEdge("D", "D"); // bucle permitido
+  g.addEdge("D", "E");
+  g.addEdge("E", "F");
+  g.addEdge("F", "A");
 
   // Imprimir representaciones
   g.printAdjacencyList();
